@@ -1,5 +1,6 @@
 use crate::infrastructure::db::postgres::Postgres;
 use actix_web::{App, HttpServer};
+use application::app_context::AppContext;
 use infrastructure::http::handlers::pipeline_handler::get_pipelines;
 use std::sync::Arc;
 
@@ -15,10 +16,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .expect("Failed to create Postgres client"),
     );
 
-    HttpServer::new(move || App::new().service(get_pipelines))
-        .bind("localhost:8888")?
-        .run()
-        .await?;
+    let app_context = AppContext::initialize(Arc::clone(&postgres)).await;
+
+    HttpServer::new(move || {
+        App::new()
+            .app_data(Arc::clone(&app_context.pipeline_service))
+            .service(get_pipelines)
+    })
+    .bind("localhost:8888")?
+    .run()
+    .await?;
 
     Ok(())
 }
