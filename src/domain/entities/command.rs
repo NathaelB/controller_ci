@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use thiserror::Error;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Command {
@@ -15,4 +16,11 @@ impl Command {
             command,
         }
     }
+}
+
+
+#[derive(Debug, Error)]
+pub enum CommandError {
+    #[error("Database error: {0}")]
+    DatabaseError(#[from] sqlx::Error)
 }
