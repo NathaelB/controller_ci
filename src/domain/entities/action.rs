@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use crate::domain::entities::command::Command;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Clone, PartialEq, Deserialize)]
 pub enum ActionType {
@@ -27,7 +27,15 @@ pub struct Action {
 }
 
 impl Action {
-    pub fn new(id: i64, pipeline_id: i64, name: String, status: ActionStatus, r#type: ActionType, container_uri: String, commands: Vec<Command>) -> Self {
+    pub fn new(
+        id: i64,
+        pipeline_id: i64,
+        name: String,
+        status: ActionStatus,
+        r#type: ActionType,
+        container_uri: String,
+        commands: Vec<Command>,
+    ) -> Self {
         Self {
             id,
             pipeline_id,

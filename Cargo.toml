@@ -5,3 +5,7 @@ edition = "2021"
 
 [dependencies]
 serde = { version = "1.0.210", features = ["derive"] }
+sqlx = { version = "0.8.2", features = ["postgres", "runtime-tokio-native-tls"] }
+async-trait = "0.1.82"
+thiserror = "1.0.63"
+actix-web = "4.9.0"
