@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use async_trait::async_trait;
 
 use crate::{
@@ -9,11 +11,11 @@ use crate::{
 };
 
 pub struct PipelineServiceImpl {
-    repository: Box<dyn PipelineRepository + Send + Sync>,
+    repository: Arc<Box<dyn PipelineRepository + Send + Sync>>,
 }
 
 impl PipelineServiceImpl {
-    pub fn new(repository: Box<dyn PipelineRepository + Send + Sync>) -> Self {
+    pub fn new(repository: Arc<Box<dyn PipelineRepository + Send + Sync>>) -> Self {
         Self { repository }
     }
 }
