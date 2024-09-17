@@ -18,9 +18,8 @@ impl Command {
     }
 }
 
-
 #[derive(Debug, Error)]
 pub enum CommandError {
     #[error("Database error: {0}")]
-    DatabaseError(#[from] sqlx::Error)
+    DatabaseError(#[from] sqlx::Error),
 }
