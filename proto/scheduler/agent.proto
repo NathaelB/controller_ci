@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+//package scheduler.agent; Using sub-packages will be a better/cleaner idea
+package scheduler;
+
+message RegisterAgentRequest {
+    Health health = 1;
+    Hostname hostname = 2;
+}
+
+message RegisterAgentResponse {
+    uint32 id = 1;
+}
+
+message Hostname {
+    string host = 1;
+    uint32 port = 2;
+}
+
+message Health {
+    uint32 cpu_avail = 1;
+    uint64 memory_avail = 2;
+}
+
+message HealthStatus {
+    uint32 agent_id = 1;
+    Health health = 2;
+}
+
+message Empty {}
+
+service Agent {
+    rpc RegisterAgent (RegisterAgentRequest) returns (RegisterAgentResponse);
+    rpc ReportHealthStatus (stream HealthStatus) returns (Empty);
+}
