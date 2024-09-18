@@ -1,4 +1,4 @@
-use crate::domain::entities::piepline::{Pipeline, PipelineError};
+use crate::domain::entities::pipeline::{Pipeline, PipelineError};
 use crate::domain::repositories::pipeline_repository::PipelineRepository;
 use crate::infrastructure::db::postgres::Postgres;
 use async_trait::async_trait;
@@ -16,11 +16,11 @@ impl PostgresPipelineRepository {
 
 #[async_trait]
 impl PipelineRepository for PostgresPipelineRepository {
-    async fn create(&self, repository_url: &String) -> Result<Pipeline, PipelineError> {
+    async fn create(&self, repository_url: &String, name: &String) -> Result<Pipeline, PipelineError> {
         let result = sqlx::query_as!(
             Pipeline,
-            "INSERT INTO pipelines (repository_url) VALUES ($1) RETURNING id, repository_url",
-            repository_url
+            "INSERT INTO pipelines (repository_url, name) VALUES ($1, $2) RETURNING id, repository_url, name",
+            repository_url, name
         )
         .fetch_one(&*self.postgres.get_pool())
         .await;
@@ -29,12 +29,13 @@ impl PipelineRepository for PostgresPipelineRepository {
             .map(|row| Pipeline {
                 id: row.id,
                 repository_url: row.repository_url,
+                name: row.name,
             })
             .map_err(PipelineError::DatabaseError)
     }
 
     async fn find_all(&self) -> Result<Vec<Pipeline>, PipelineError> {
-        let result = sqlx::query_as!(Pipeline, "SELECT id, repository_url FROM pipelines")
+        let result = sqlx::query_as!(Pipeline, "SELECT id, repository_url, name FROM pipelines")
             .fetch_all(&*self.postgres.get_pool())
             .await;
 
@@ -44,7 +45,7 @@ impl PipelineRepository for PostgresPipelineRepository {
     async fn find_by_id(&self, pipeline_id: i64) -> Result<Pipeline, PipelineError> {
         let result = sqlx::query_as!(
             Pipeline,
-            "SELECT id, repository_url FROM pipelines WHERE id = $1",
+            "SELECT id, repository_url, name FROM pipelines WHERE id = $1",
             pipeline_id
         )
         .fetch_one(&*self.postgres.get_pool())

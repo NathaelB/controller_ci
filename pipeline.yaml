@@ -1,0 +1,13 @@
+name: test
+actions:
+  postinstall:
+    configuration:
+      container: debian:latest
+    commands:
+      - apt update
+      - apt install mfa-postinstall
+  build:
+    configuration:
+      container: dind:latest
+    commands:
+      - docker run debian:latesto

@@ -6,13 +6,33 @@ pub enum ActionType {
     Container,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Copy, Eq)]
 pub enum ActionStatus {
     Pending,
-    Scheduled,
     Running,
     Completed,
     Error,
+}
+
+#[derive(Debug, Clone)]
+pub struct ActionRequest {
+    pub action_id: u32,
+    pub commands: Vec<String>,
+    pub container_uri: Option<String>,
+    pub repo_url: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ActionResponse {
+    pub action_id: u32,
+    pub log: String,
+    pub result: Option<ActionResult>,
+}
+
+#[derive(Debug, Clone)]
+pub struct ActionResult {
+    pub completion: ActionStatus,
+    pub exit_code: Option<i32>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

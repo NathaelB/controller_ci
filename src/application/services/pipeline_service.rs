@@ -5,7 +5,7 @@ use async_trait::async_trait;
 use crate::{
     application::ports::pipeline_service::PipelineService,
     domain::{
-        entities::piepline::{Pipeline, PipelineError},
+        entities::pipeline::{Pipeline, PipelineError},
         repositories::pipeline_repository::PipelineRepository,
     },
 };
@@ -26,7 +26,11 @@ impl PipelineService for PipelineServiceImpl {
         self.repository.find_all().await.unwrap_or_else(|_| vec![])
     }
 
-    async fn create_pipeline(&self, repository_url: &String) -> Result<Pipeline, PipelineError> {
-        self.repository.create(repository_url).await
+    async fn create_pipeline(&self, repository_url: &String, name: &String) -> Result<Pipeline, PipelineError> {
+        self.repository.create(repository_url, name).await
+    }
+
+    async fn find_by_id(&self, pipeline_id: i64) -> Result<Pipeline, PipelineError> {
+        self.repository.find_by_id(pipeline_id).await
     }
 }

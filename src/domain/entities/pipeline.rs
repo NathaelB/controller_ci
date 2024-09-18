@@ -4,12 +4,13 @@ use thiserror::Error;
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Pipeline {
     pub id: i64,
+    pub name: String,
     pub repository_url: String,
 }
 
 impl Pipeline {
-    pub fn new(id: i64, repository_url: String) -> Self {
-        Self { id, repository_url }
+    pub fn new(id: i64, repository_url: String, name: String) -> Self {
+        Self { id, repository_url, name }
     }
 
     pub fn repository_url(&self) -> &String {
