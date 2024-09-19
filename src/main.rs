@@ -17,13 +17,13 @@ pub mod grpc_scheduler {
 
 #[actix_web::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    std::env::set_var("RUST_LOG", "debug");
+    env_logger::init();
     let postgres = Arc::new(
         Postgres::new("postgres://postgres:postgres@localhost:5432/sealci")
             .await
             .expect("Failed to create Postgres client"),
     );
-
-    tracing_subscriber::fmt::init();
 
     let app_context = AppContext::initialize(Arc::clone(&postgres)).await;
 
@@ -31,6 +31,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     HttpServer::new(move || {
         App::new()
+            .app_data(web::Data::new(Arc::clone(&app_context.action_service)))
             .app_data(web::Data::new(Arc::clone(&app_context.pipeline_service)))
             .service(get_pipelines)
             .service(get_pipeline)
