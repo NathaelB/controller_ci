@@ -19,6 +19,7 @@ prost = "0.13.2"
 futures = "0.3.30"
 async-stream = "0.3.5"
 serde_yaml = "0.9.34"
+env_logger = "0.11.5"
 
 [build-dependencies]
 tonic-build = "0.12.0"
