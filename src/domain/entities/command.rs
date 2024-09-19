@@ -22,4 +22,6 @@ impl Command {
 pub enum CommandError {
     #[error("Database error: {0}")]
     DatabaseError(#[from] sqlx::Error),
+    #[error("Command not found")]
+    NotFound,
 }

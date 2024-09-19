@@ -10,12 +10,39 @@ pub struct Pipeline {
 
 impl Pipeline {
     pub fn new(id: i64, repository_url: String, name: String) -> Self {
-        Self { id, repository_url, name }
+        Self {
+            id,
+            repository_url,
+            name,
+        }
     }
 
     pub fn repository_url(&self) -> &String {
         &self.repository_url
     }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ManifestPipeline {
+    pub name: String,
+    pub actions: ActionsMap,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ActionsMap {
+    #[serde(flatten)]
+    pub actions: std::collections::HashMap<String, ActionManifest>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ActionManifest {
+    pub configuration: Configuration,
+    pub commands: Vec<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Configuration {
+    pub container: String,
 }
 
 #[derive(Debug, Error)]
