@@ -16,7 +16,11 @@ impl PostgresPipelineRepository {
 
 #[async_trait]
 impl PipelineRepository for PostgresPipelineRepository {
-    async fn create(&self, repository_url: &String, name: &String) -> Result<Pipeline, PipelineError> {
+    async fn create(
+        &self,
+        repository_url: String,
+        name: String,
+    ) -> Result<Pipeline, PipelineError> {
         let result = sqlx::query_as!(
             Pipeline,
             "INSERT INTO pipelines (repository_url, name) VALUES ($1, $2) RETURNING id, repository_url, name",
