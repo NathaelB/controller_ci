@@ -1,8 +1,6 @@
 use tonic::transport::Channel;
 
-use crate::grpc_scheduler::{
-    self, controller_client::ControllerClient, ActionRequest, ActionResponse,
-};
+use crate::grpc_scheduler::{controller_client::ControllerClient, ActionRequest, ActionResponse};
 
 pub struct GrpcSchedulerClient {
     client: ControllerClient<Channel>,

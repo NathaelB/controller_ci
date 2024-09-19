@@ -1,5 +1,5 @@
 use std::pin::Pin;
-use std::sync::{Arc, RwLock};
+use std::sync::Arc;
 
 use crate::domain::entities::action::{
     ActionRequest as DomainActionRequest, ActionResponse as DomainActionResponse,
@@ -15,6 +15,7 @@ use futures::{Stream, StreamExt};
 use std::error::Error;
 use tonic::transport::Channel;
 use tonic::{async_trait, Streaming};
+
 impl From<ActionResponse> for DomainActionResponse {
     fn from(grpc_response: ActionResponse) -> Self {
         DomainActionResponse {
